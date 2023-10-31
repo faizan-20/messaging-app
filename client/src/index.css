@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.form-item {
+    @apply flex flex-col text-lg
+}
+
+.form-item > input {
+    @apply rounded-md bg-gray-900 px-2 py-2
+}
+
+.form-item > label {
+    @apply mb-2 text-slate-400
+}
