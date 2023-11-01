@@ -15,8 +15,6 @@ passport.use(
         },
         async (username, password, done) => {
             try {
-                const userExists = await User.findOne({ username });
-                if (userExists) return done(null, false, {message: 'Username alredy exists'});
                 const user = await User.create({ username, password });
                 return done(null, user);
             } catch (err) {
