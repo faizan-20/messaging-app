@@ -20,12 +20,12 @@ export default function Login() {
                 }),
             });
             const result = await res.json();
+            console.log(result);
             localStorage.setItem("token", result.token);
+            window.location.reload(true);
         } catch(err) {
             console.error(err);
         }
-        setUsername("");
-        setPassword("");
     }
 
     return (
@@ -35,14 +35,14 @@ export default function Login() {
                 <form action="#" className="h-[50%] flex flex-col justify-around" onSubmit={handleSubmit}>
                     <div className="form-item">
                         <label htmlFor="username">Username:</label>
-                        <input type="text" name="username" id="username" required />
+                        <input type="text" name="username" id="username" onChange={e => setUsername(e.target.value)} required />
                     </div>
                     <div className="form-item">
                         <label htmlFor="password">Password</label>
-                        <input type="text" name="password" id="password" required />
+                        <input type="password" name="password" id="password" onChange={e => setPassword(e.target.value)} required />
                     </div>
+                    <button type="submit" className=" bg-emerald-800 rounded-md px-1 py-2 font-bold hover:bg-emerald-700 transition-all" >Login</button>
                 </form>
-                <button type="submit" className=" bg-emerald-800 rounded-md px-1 py-2 font-bold hover:bg-emerald-700 transition-all" >Login</button>
                 <Link to="/signup" className=" text-indigo-800 hover:text-slate-500 transition-all">Create new account</Link>
             </div>
         </div>
