@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
+const { Server } = require('socket.io');
 
 require('dotenv').config();
 const mongoose = require('mongoose');
@@ -14,6 +15,20 @@ const authRouter = require('./routes/authRouter');
 const PORT = 3000;
 
 const app = express();
+const http = require('http');
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+    cors: {
+        origin: 'http://localhost:5173',
+        methods: ['GET', 'POST'],
+    },
+});
+
+io.on('connection', (socket) => {
+    console.log(`User connected ${socket.id}`);
+})
 
 mongoose.set("strictQuery", false);
 main().catch((err) => console.log(err));
@@ -28,4 +43,4 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/', authRouter);
 
-app.listen(PORT, () => console.log(`server is running on port ${PORT}`));
+server.listen(PORT, () => console.log(`server is running on port ${PORT}`));
