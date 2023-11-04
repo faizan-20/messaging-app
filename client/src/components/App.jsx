@@ -3,6 +3,9 @@ import Login from "./Login"
 import Signup from "./Signup"
 import { useEffect, useState } from "react"
 import Home from "./Home";
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:3000");
 
 function App() {
 
@@ -38,7 +41,7 @@ function App() {
     <Routes>
       <Route 
         path="/"
-        element={auth ? <Home /> : <Login />}
+        element={auth ? <Home socket={socket} /> : <Login />}
       />
       <Route 
         path="/signup"
