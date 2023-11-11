@@ -10,6 +10,7 @@ const socket = io.connect("http://localhost:3000");
 function App() {
 
   const [auth, setAuth] = useState(false);
+  const [user, setUser] = useState({});
 
   async function checkAuth() {
     try {
@@ -20,9 +21,10 @@ function App() {
         }
       });
       const result = await res.json();
-      console.log(result.user);
+      console.log(result);
       if (result.user) {
         setAuth(true);
+        setUser(result.user);
         return true;
       } else {
         setAuth(false);
@@ -41,7 +43,7 @@ function App() {
     <Routes>
       <Route 
         path="/"
-        element={auth ? <Home socket={socket} /> : <Login />}
+        element={auth ? <Home socket={socket} user={user} /> : <Login />}
       />
       <Route 
         path="/signup"
