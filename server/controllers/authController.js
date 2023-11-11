@@ -1,20 +1,34 @@
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const User = require('../models/user');
 require('dotenv').config();
 
-exports.signup_post = [
-    passport.authenticate('signup', { session: false }),
-    async (req, res, next) => {
-        try {
-            res.json ({
-                message: 'Signup successful',
-                user: req.user
+exports.signup_post = async(req, res, next) => {
+    try {
+        const checkUsername = await User.findOne({username: req.body.username});
+
+        if (!checkUsername) {
+            const user = new User({
+                first_name: req.body.first_name,
+                last_name: req.body.last_name,
+                username: req.body.username,
+                password: req.body.password,
             });
-        } catch(err) {
-            next(err);
+            await user.save();
+            return res.json({
+                result: "success",
+                user
+            });
+        } else {
+            return res.json({
+                result: "user already exists",
+            });
         }
+    } catch(err) {
+        return next(err);
     }
-]
+}
 
 exports.login_post = async(req, res, next) => {
     try {

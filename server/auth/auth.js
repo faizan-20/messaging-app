@@ -7,24 +7,6 @@ require('dotenv').config();
 const User = require('../models/user');
 
 passport.use(
-    'signup',
-    new LocalStrategy(
-        {
-            usernameField: 'username',
-            passwordField: 'password'
-        },
-        async (username, password, done) => {
-            try {
-                const user = await User.create({ username, password });
-                return done(null, user);
-            } catch (err) {
-                done(err);
-            }
-        }
-    )
-);
-
-passport.use(
     'login',
     new LocalStrategy({
         usernameField: 'username',
