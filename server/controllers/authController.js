@@ -2,6 +2,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const User = require('../models/user');
+const user = require('../models/user');
 require('dotenv').config();
 
 exports.signup_post = async(req, res, next) => {
@@ -62,13 +63,14 @@ exports.login_post = async(req, res, next) => {
     }
 }
 
-exports.checkLogged_post = (req, res, next) => {
+exports.checkLogged_post = async (req, res, next) => {
         const token = req.headers['access-token'];
         if(!token) return res.status(401).json('Unauthorize user')
 
         try {
             const decoded = jwt.verify(token, process.env.SECRET_KEY);
-            res.json ({...decoded});
+            const user = await User.findOne({username: decoded.user.username});
+            res.json (user);
         } catch(e) {
             res.status(400).json('invalid token');
         }
