@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 
-export default function Home({ user }) {
+export default function Home({ user, socket }) {
+
     return (
         <div className="bg-gray-900 text-slate-200 h-screen flex justify-center items-center">
-            <div className=" bg-slate-800 h-[90%] w-[30vw] overflow-auto flex flex-col">
+            <div className=" bg-slate-800 h-screen w-1/3 overflow-auto flex flex-col">
                 <div className=" bg-slate-950 h-[6rem] flex items-center justify-between px-8">
                     <div>
                         <div>Welcome,</div>
@@ -15,9 +17,21 @@ export default function Home({ user }) {
                         </svg>
                     </div>
                 </div>
-                <div>messages</div>
+                <div>
+                    <div>messages</div>
+                </div>
             </div>
-            <div className=" bg-slate-600 h-[90%] w-[60vw] overflow-auto">chat</div>
+            <div className=" bg-slate-600 h-screen w-2/3 overflow-auto p-2 flex flex-col">
+                <div className='flex-grow'>chat</div>
+                <div className='flex gap-2'>
+                    <input type="text" placeholder='Type yout message here' className=' bg-white border p-2 flex-grow rounded-md' />
+                    <button className=' bg-slate-950 p-2 rounded-md'>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
     );
 }

@@ -2,10 +2,9 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const User = require('../models/user');
-const user = require('../models/user');
 require('dotenv').config();
 
-exports.signup_post = async(req, res, next) => {
+exports.signup_post = async(req, res) => {
     try {
         const checkUsername = await User.findOne({username: req.body.username});
 
@@ -31,7 +30,7 @@ exports.signup_post = async(req, res, next) => {
     }
 }
 
-exports.login_post = async(req, res, next) => {
+exports.login_post = async(req, res) => {
     try {
         passport.authenticate(
             'login',
@@ -59,7 +58,7 @@ exports.login_post = async(req, res, next) => {
             }
         )(req, res, next);
     } catch(error) {
-        return next(error);
+       res.json('error');
     }
 }
 

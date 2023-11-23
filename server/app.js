@@ -11,6 +11,7 @@ require('./auth/auth');
 
 //routes
 const authRouter = require('./routes/authRouter');
+const userRouter = require('./routes/userRouter');
 
 const PORT = 3000;
 
@@ -28,6 +29,9 @@ const io = new Server(server, {
 
 io.on('connection', (socket) => {
     console.log(`User connected ${socket.id}`);
+    socket.on('disconnect', () => {
+        console.log('user disconnected');
+    });
 })
 
 mongoose.set("strictQuery", false);
@@ -42,5 +46,6 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/', authRouter);
+app.use('/user', userRouter);
 
 server.listen(PORT, () => console.log(`server is running on port ${PORT}`));
