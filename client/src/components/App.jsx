@@ -20,15 +20,13 @@ function App() {
           "access-token": `${localStorage.getItem("token")}`
         }
       });
-      const user = await res.json();
-      console.log(user);
-      if (user) {
+      const result = await res.json();
+      console.log(result);
+      if (result) {
         setAuth(true);
-        setUser(user);
-        return true;
+        setUser(result);
       } else {
         setAuth(false);
-        return false;
       }
     } catch(err) {
       console.error(err);

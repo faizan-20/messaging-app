@@ -38,14 +38,14 @@ exports.login_post = async(req, res) => {
                 try {
                     if (err || !user) {
                         const error = new Error('An error occurd.');
-                        return next(error);
+                        return console.error(error);
                     }
 
                     req.login(
                         user,
                         {session: false},
                         async (error) => {
-                            if (error) return next(error);
+                            if (error) return console.error(error);
                             const body = {_id: user._id, username: user.username};
                             const token = jwt.sign({ user: body }, process.env.SECRET_KEY);
 
@@ -53,10 +53,10 @@ exports.login_post = async(req, res) => {
                         }
                     );
                 } catch(error) {
-                    next(error);
+                    console.error(error);
                 }
             }
-        )(req, res, next);
+        )(req, res);
     } catch(error) {
        res.json('error');
     }
@@ -64,13 +64,14 @@ exports.login_post = async(req, res) => {
 
 exports.checkLogged_post = async (req, res, next) => {
         const token = req.headers['access-token'];
-        if(!token) return res.status(401).json('Unauthorize user')
+        if(token === null) return res.status(401).json('Unauthorize user')
 
         try {
             const decoded = jwt.verify(token, process.env.SECRET_KEY);
-            const user = await User.findOne({username: decoded.user.username});
-            res.json (user);
+            const user = await User.findOne({username: decoded.user.username}).select("-password");
+            res.json(user);
         } catch(e) {
-            res.status(400).json('invalid token');
+            console.log(e);
+            res.status(400);
         }
 }

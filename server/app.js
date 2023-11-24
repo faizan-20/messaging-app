@@ -1,7 +1,6 @@
 const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const passport = require('passport');
 const { Server } = require('socket.io');
 
 require('dotenv').config();
@@ -12,6 +11,7 @@ require('./auth/auth');
 //routes
 const authRouter = require('./routes/authRouter');
 const userRouter = require('./routes/userRouter');
+const chatRouter = require('./routes/chatRouter');
 
 const PORT = 3000;
 
@@ -47,5 +47,6 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/', authRouter);
 app.use('/user', userRouter);
+app.use('/chat', chatRouter);
 
 server.listen(PORT, () => console.log(`server is running on port ${PORT}`));
