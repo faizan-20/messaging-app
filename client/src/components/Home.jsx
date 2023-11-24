@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-export default function Home({ user, socket }) {
+export default function Home({ user }) {
 
     return (
         <div className="bg-gray-900 text-slate-200 h-screen flex justify-center items-center">
