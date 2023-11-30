@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const User = require('../models/user');
 
 const protect = async(req, res, next) => {
-    if (req.header['access-token']){
+    if (req.headers['access-token']){
         try{
             const token = req.headers['access-token'];
 
