@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 export default function Login() {
 
@@ -9,20 +10,15 @@ export default function Login() {
     async function handleSubmit(e) {
         try {
             e.preventDefault();
-            const res = await fetch('http://localhost:3000/login', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                }),
+            const result = await axios.post('/login', {
+                username: username,
+                password: password
             });
-            const result = await res.json();
             console.log(result);
-            localStorage.setItem("token", result.token);
-            window.location.reload(true);
+            if (result.data.token){
+                localStorage.setItem("token", result.data.token);
+                window.location.reload(true);
+            }
         } catch(err) {
             console.error(err);
         }
