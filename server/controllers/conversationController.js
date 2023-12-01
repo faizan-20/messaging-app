@@ -1,5 +1,4 @@
 const asyncHandler = require('express-async-handler');
-const mongoose = require('mongoose');
 
 const Conversation = require('../models/conversation');
 
@@ -21,7 +20,7 @@ exports.accessConversation = asyncHandler(async (req, res) => {
         res.json(isConversation)
     } else {
         let conversationData = {
-            participants: [userId1, userId2],
+            participants: [req.user._id, userId],
         };
 
         try {
@@ -34,4 +33,12 @@ exports.accessConversation = asyncHandler(async (req, res) => {
             console.error(err);
         }
     }
+});
+
+exports.fetchConversations = asyncHandler(async(req, res) => {
+   const conversations = await Conversation.find({
+    participants: { $elemMatch: { $eq: req.user._id } }
+   }).populate("participants", "-password").sort({updatedAt: -1}); 
+
+   res.status(200).json(conversations);
 });

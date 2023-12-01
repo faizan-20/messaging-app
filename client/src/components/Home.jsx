@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import Conversations from './Conversations';
 
 export default function Home({ user }) {
 
@@ -17,7 +18,7 @@ export default function Home({ user }) {
                     </div>
                 </div>
                 <div>
-                    <div>messages</div>
+                    <Conversations/>
                 </div>
             </div>
             <div className=" bg-slate-600 h-screen w-2/3 overflow-auto p-2 flex flex-col">
