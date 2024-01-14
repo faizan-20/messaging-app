@@ -1,7 +1,3 @@
-// const express = require("express");
-// const cookieParser = require("cookie-parser");
-// const cors = require("cors");
-// const { default: connectDB } = require("./db");
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
@@ -16,9 +12,9 @@ app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-app.get("/", (req, res) => {
-  res.send("EVERYTHING IS OK");
-});
+import userRouter from "./routes/user.routes.js";
+
+app.use("/api/v1/users", userRouter);
 
 connectDB()
   .then(() => {
