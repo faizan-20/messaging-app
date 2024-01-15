@@ -18,25 +18,41 @@ const registerUser = asyncHandler(async (req, res) => {
     return res.status(400).json({ msg: "username already exsists" });
 
   const avatarLocalPath = req.file?.path;
-  if (!avatarLocalPath)
-    return res.status(400).json({ msg: "Avatar is requried" });
+  if (avatarLocalPath) {
+    const avatar = await uploadOnCloudinary(avatarLocalPath);
+    if (!avatar)
+      return res
+        .status(400)
+        .json({ msg: "there was an error while uploading avatar" });
 
-  const avatar = await uploadOnCloudinary(avatarLocalPath);
-  if (!avatar) return res.status(400).json({ msg: "avatar is requried" });
+    const user = await User.create({
+      fullName,
+      avatar: avatar.url,
+      email,
+      password,
+      username: username.toLowerCase(),
+    });
 
-  const user = await User.create({
-    fullName,
-    avatar: avatar.url,
-    email,
-    password,
-    username: username.toLowerCase(),
-  });
+    const createdUser = await User.findById(user._id).select("-password");
+    if (!createdUser)
+      return res.status(500).json({ msg: "something went wrong" });
 
-  const createdUser = await User.findById(user._id).select("-password");
-  if (!createdUser)
-    return res.status(500).json({ msg: "something went wrong" });
+    return res.status(201).json(createdUser);
+  } else {
+    const user = await User.create({
+      fullName,
+      email,
+      password,
+      username: username.toLowerCase(),
+    });
 
-  return res.status(201).json(createdUser);
+    const createdUser = await User.findById(user._id).select("-password");
+    if (!createdUser)
+      return res.status(500).json({ msg: "something went wrong" });
+
+    return res.status(201).json(createdUser);
+  }
+  // return res.status(400).json({ msg: "Avatar is requried" });
 });
 
 const generateUserAccessToken = async (userId) => {
@@ -66,7 +82,6 @@ const loginUser = asyncHandler(async (req, res) => {
     return res.status(400).json({ msg: "password is not valid" });
 
   const accessToken = await generateUserAccessToken(user._id);
-  console.log("ACCESS TOKEN: ", accessToken);
 
   const loggedInUser = await User.findById(user._id).select("-password");
 
@@ -93,4 +108,26 @@ const logoutUser = (req, res) => {
     .json({ msg: "logout successful" });
 };
 
-export { registerUser, loginUser, generateUserAccessToken, logoutUser };
+const allUsers = asyncHandler(async (req, res) => {
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } },
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+
+  const users = await User.find(keyword)
+    .find({ _id: { $ne: req.user._id } })
+    .select("-password");
+  res.send(users);
+});
+
+export {
+  registerUser,
+  loginUser,
+  generateUserAccessToken,
+  logoutUser,
+  allUsers,
+};
