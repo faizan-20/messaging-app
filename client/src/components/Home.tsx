@@ -17,5 +17,5 @@ export default function Home() {
     checkUser();
   });
 
-  return <div>Home</div>;
+  return <div className="bg-gray-800 h-screen">Home</div>;
 }

@@ -4,6 +4,7 @@ import { Input } from "./ui/input";
 import axios from "axios";
 import { useToast } from "./ui/use-toast";
 import { useNavigate } from "react-router-dom";
+import { Label } from "@radix-ui/react-label";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -14,7 +15,6 @@ export default function Register() {
     confPassword: "",
   });
   const [avatar, setAvatar] = useState();
-  const [progress, setProgress] = useState(13);
 
   const { fullName, username, email, password, confPassword } = formData;
 
@@ -44,7 +44,6 @@ export default function Register() {
       });
       return;
     }
-    setProgress(45);
 
     try {
       await axios.post(
@@ -62,7 +61,6 @@ export default function Register() {
           },
         },
       );
-      setProgress(100);
       navigate("/");
     } catch (error) {
       toast({
@@ -87,67 +85,86 @@ export default function Register() {
 
   return (
     <>
-      <div className="bg-gray-800 h-screen flex justify-center items-center text-slate-100">
-        <div className="border-slate-600 border-2 rounded-md flex flex-col items-center p-8">
-          <div className="my-2 font-bold text-3xl">Create a new account</div>
-          <div className="flex-col">
-            <form onSubmit={submitHandler}>
-              <div className="mx-2 flex">
+      <div className="bg-gray-950 h-screen flex justify-center items-center text-slate-100">
+        <div className="border-slate-600 bg-slate-950 border-2 rounded-md flex flex-col items-center p-8 w-[40%]">
+          <div className="my-4 font-bold text-3xl">Create a new account</div>
+          <form onSubmit={submitHandler} className="flex flex-col space-y-4">
+            <div className="flex-1 grid grid-cols-2 gap-4">
+              <div className="flex flex-col">
+                <Label htmlFor="fullName">Full Name*</Label>
                 <Input
                   placeholder="Full Name"
                   name="fullName"
+                  id="fullName"
                   type="text"
                   value={fullName}
                   onChange={changeHandler}
-                  className="border-slate-600 m-2"
+                  className="border-slate-600"
                 />
+              </div>
+              <div className="flex flex-col">
+                <Label htmlFor="username">Username*</Label>
                 <Input
                   placeholder="Username"
                   name="username"
                   type="text"
                   value={username}
                   onChange={changeHandler}
-                  className="border-slate-600 m-2"
+                  className="border-slate-600"
                 />
               </div>
-              <div className="mx-2 flex">
+            </div>
+            <div className="flex-1 grid grid-cols-2 gap-4">
+              <div className="flex flex-col">
+                <Label htmlFor="email">Email*</Label>
                 <Input
                   placeholder="Email"
                   name="email"
                   type="text"
                   value={email}
                   onChange={changeHandler}
-                  className="border-slate-600 m-2"
+                  className="border-slate-600"
                 />
+              </div>
+              <div className="flex flex-col">
+                <Label htmlFor="avatar">Profile Picture</Label>
                 <Input
                   placeholder="Profile Picture"
                   name="avatar"
                   type="file"
                   onChange={(e) => setAvatar(e.target.files[0])}
-                  className="border-slate-600 m-2"
+                  className="border-slate-600"
                 />
               </div>
-              <div className="mx-2 flex">
+            </div>
+            <div className="flex-1 grid grid-cols-2 gap-4">
+              <div className="flex flex-col">
+                <Label htmlFor="password">Password*</Label>
                 <Input
                   placeholder="Password"
                   name="password"
                   type="password"
                   value={password}
                   onChange={changeHandler}
-                  className="border-slate-600 m-2"
+                  className="border-slate-600"
                 />
+              </div>
+              <div className="flex flex-col">
+                <Label htmlFor="confPassword">Confirm Password*</Label>
                 <Input
                   placeholder="Confirm Password"
                   name="confPassword"
                   type="password"
                   value={confPassword}
                   onChange={changeHandler}
-                  className="border-slate-600 m-2"
+                  className="border-slate-600"
                 />
               </div>
+            </div>
+            <div>
               <Button className="m-4">Submit</Button>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </>
