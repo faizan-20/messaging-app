@@ -14,7 +14,7 @@ export default function Register() {
     password: "",
     confPassword: "",
   });
-  const [avatar, setAvatar] = useState();
+  const [avatar, setAvatar] = useState<File | undefined>();
 
   const { fullName, username, email, password, confPassword } = formData;
 
@@ -132,7 +132,9 @@ export default function Register() {
                   placeholder="Profile Picture"
                   name="avatar"
                   type="file"
-                  onChange={(e) => setAvatar(e.target.files[0])}
+                  onChange={(e) =>
+                    setAvatar(e.target.files ? e.target.files[0] : undefined)
+                  }
                   className="border-slate-600"
                 />
               </div>

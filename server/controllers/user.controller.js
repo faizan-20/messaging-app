@@ -145,7 +145,9 @@ const allUsers = asyncHandler(async (req, res) => {
 });
 
 const currUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user?._id).select("-password");
+  const user = await User.findById(req.user?._id).select(
+    "-password -updatedAt -createdAt -__v",
+  );
 
   if (!user) return res.status(401).json({ msg: "user not found" });
   return res.status(200).json(user);
