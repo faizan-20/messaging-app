@@ -65,16 +65,19 @@ export default function Register() {
       setProgress(100);
       navigate("/");
     } catch (error) {
-      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "Oh uh, Something went wrong",
+        description: error.response.data.msg,
+      });
     }
   };
 
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const response = await axios.get("/users");
+        await axios.get("/users");
         navigate("/home");
-        console.log(response.data);
       } catch (error) {
         console.error(error);
       }

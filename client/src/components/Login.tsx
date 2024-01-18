@@ -3,6 +3,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { useToast } from "./ui/use-toast";
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ export default function Login() {
 
   const { username, password } = formData;
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,16 +30,19 @@ export default function Login() {
       });
       navigate("/home");
     } catch (error) {
-      console.error(error);
+      toast({
+        variant: "destructive",
+        title: "Oh uh, Something went wrong",
+        description: error.response.data.msg,
+      });
     }
   };
 
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const response = await axios.get("/users");
+        await axios.get("/users");
         navigate("/home");
-        console.log(response.data);
       } catch (error) {
         console.error(error);
       }
