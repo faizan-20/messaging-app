@@ -37,7 +37,15 @@ const registerUser = asyncHandler(async (req, res) => {
     if (!createdUser)
       return res.status(500).json({ msg: "something went wrong" });
 
-    return res.status(201).json(createdUser);
+    const accessToken = await generateUserAccessToken(user._id);
+    return res.status(201).json({
+      _id: createdUser._id,
+      username: createdUser.username,
+      email: createdUser.email,
+      fullName: createdUser.fullName,
+      avatar: createdUser.avatar,
+      token: accessToken,
+    });
   } else {
     const user = await User.create({
       fullName,
@@ -50,7 +58,15 @@ const registerUser = asyncHandler(async (req, res) => {
     if (!createdUser)
       return res.status(500).json({ msg: "something went wrong" });
 
-    return res.status(201).json(createdUser);
+    const accessToken = await generateUserAccessToken(user._id);
+    return res.status(201).json({
+      _id: createdUser._id,
+      username: createdUser.username,
+      email: createdUser.email,
+      fullName: createdUser.fullName,
+      avatar: createdUser.avatar,
+      token: accessToken,
+    });
   }
   // return res.status(400).json({ msg: "Avatar is requried" });
 });
@@ -86,20 +102,24 @@ const loginUser = asyncHandler(async (req, res) => {
   const loggedInUser = await User.findById(user._id).select("-password");
 
   const options = {
-    httpOnly: true,
-    secure: true,
+    //httpOnly: true,
+    // secure: true,
   };
 
-  return res
-    .status(200)
-    .cookie("accessToken", accessToken, options)
-    .json(loggedInUser);
+  return res.status(200).cookie("accessToken", accessToken, options).json({
+    _id: loggedInUser._id,
+    username: loggedInUser.username,
+    email: loggedInUser.email,
+    fullName: loggedInUser.fullName,
+    avatar: loggedInUser.avatar,
+    token: accessToken,
+  });
 });
 
 const logoutUser = (req, res) => {
   const options = {
-    httpOnly: true,
-    secure: true,
+    // httpOnly: true,
+    // secure: true,
   };
 
   return res
@@ -124,10 +144,18 @@ const allUsers = asyncHandler(async (req, res) => {
   res.send(users);
 });
 
+const currUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user?._id).select("-password");
+
+  if (!user) return res.status(401).json({ msg: "user not found" });
+  return res.status(200).json(user);
+});
+
 export {
   registerUser,
   loginUser,
   generateUserAccessToken,
   logoutUser,
   allUsers,
+  currUser,
 };
