@@ -1,42 +1,17 @@
 import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 import { AvatarImage } from "./ui/avatar";
 import AddUser from "./AddUser";
-import axios from "axios";
-import { useEffect, useState } from "react";
-
-type User = {
-  _id: string;
-  username: string;
-  email: string;
-  fullName: string;
-  avatar: string;
-};
+import ContactCard, { User } from "./ContactCard";
+import { useContext, useState } from "react";
+import { ChatContext } from "@/context/ChatProvider";
 
 type UserProps = {
   user: User;
 };
 
-type Chat = {
-  users: User[];
-};
-
 export default function Contacts({ user }: UserProps) {
-  const [chats, setChats] = useState<User[]>();
-
-  useEffect(() => {
-    const fetchChats = async () => {
-      try {
-        const { data } = await axios.get<Chat[]>("/chat");
-        const results = data.flatMap((x) =>
-          x.users.filter((y) => y._id !== user._id),
-        );
-        setChats(results);
-      } catch (error) {
-        console.error("error fetching chats: ", error);
-      }
-    };
-    fetchChats();
-  }, [user._id]);
+  const { chat } = useContext(ChatContext);
+  const [selectedChat, setSelectedChat] = useState("");
 
   return (
     <>
@@ -46,7 +21,7 @@ export default function Contacts({ user }: UserProps) {
             <Avatar>
               <AvatarImage
                 src={user.avatar}
-                className="object-cover rounded-[50%] align-middle"
+                className="object-cover rounded-full"
               />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
@@ -54,7 +29,25 @@ export default function Contacts({ user }: UserProps) {
           <div className="mx-6 font-bold text-xl">{user.fullName}</div>
           <AddUser />
         </div>
-        <div className="bg-gray-800 h-[88%]">Contacts</div>
+        <div className="bg-gray-800 h-[88%] pl-2">
+          {chat ? (
+            <div>
+              {chat.map((c) => (
+                <div key={c._id}>
+                  <ContactCard
+                    usr={c.users[0]?._id === user._id ? c.users[1] : c.users[0]}
+                    latestMessage={c.latestMessage}
+                    chatId={c._id}
+                    selectedChat={selectedChat}
+                    setSelectedChat={setSelectedChat}
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div>loading</div>
+          )}
+        </div>
       </div>
     </>
   );

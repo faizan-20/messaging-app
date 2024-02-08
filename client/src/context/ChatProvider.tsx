@@ -19,7 +19,6 @@ export type ChatType = {
   _id: string;
   users: User[];
   latestMessage?: LatestMessage;
-  selectedChat?: string;
 };
 
 export type ChatContextInterface = {
@@ -33,7 +32,6 @@ const defaultState = {
       _id: "",
       users: [],
       latestMessage: undefined,
-      selectedChat: "",
     },
   ],
   setChat: () => {},
