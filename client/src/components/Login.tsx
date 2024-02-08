@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Link, useNavigate } from "react-router-dom";
@@ -31,11 +31,13 @@ export default function Login() {
       });
       navigate("/home");
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Oh uh, Something went wrong",
-        description: error.response.data.msg,
-      });
+      if (isAxiosError(error)) {
+        toast({
+          variant: "destructive",
+          title: "Oh uh, Something went wrong",
+          description: error?.response?.data.msg,
+        });
+      } else console.error(error);
     }
   };
 
