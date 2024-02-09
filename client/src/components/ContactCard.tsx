@@ -26,7 +26,7 @@ export default function ContactCard({
 }: ContactCardProps) {
   return (
     <div
-      className={`flex items-center px-4 py-4 cursor-pointer transition-all border-l-2 rounded-l-full border-gray-800 ${selectedChat === chatId ? "bg-slate-900" : "bg-gray-800"}`}
+      className={`flex items-center px-4 py-4 cursor-pointer transition-all border-l-2 rounded-l-full border-gray-800 hover:bg-slate-700 ${selectedChat === chatId ? "bg-gray-900" : "bg-gray-800"}`}
       onClick={() => {
         setSelectedChat(chatId);
       }}

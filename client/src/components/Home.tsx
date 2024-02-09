@@ -5,6 +5,7 @@ import Contacts from "./Contacts";
 import Chat from "./Chat";
 import { ChatContext, ChatType } from "@/context/ChatProvider";
 import { User } from "./ContactCard";
+import SelectedChatProvider from "@/context/SelectedChatProvider";
 
 export default function Home() {
   const [user, setUser] = useState<User>();
@@ -40,8 +41,12 @@ export default function Home() {
 
   return (
     <div className="bg-gray-900 h-screen flex text-slate-200">
-      {user ? <Contacts user={user} /> : <div>getting user</div>}
-      <Chat />
+      <SelectedChatProvider>
+        {user ? <Contacts user={user} /> : <div>getting user</div>}
+        <div className="flex-1">
+          <Chat />
+        </div>
+      </SelectedChatProvider>
     </div>
   );
 }

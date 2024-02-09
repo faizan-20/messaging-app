@@ -2,8 +2,9 @@ import { Avatar, AvatarFallback } from "@radix-ui/react-avatar";
 import { AvatarImage } from "./ui/avatar";
 import AddUser from "./AddUser";
 import ContactCard, { User } from "./ContactCard";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { ChatContext } from "@/context/ChatProvider";
+import { SelectedChatContext } from "@/context/SelectedChatProvider";
 
 type UserProps = {
   user: User;
@@ -11,7 +12,7 @@ type UserProps = {
 
 export default function Contacts({ user }: UserProps) {
   const { chat } = useContext(ChatContext);
-  const [selectedChat, setSelectedChat] = useState("");
+  const { selectedChat, setSelectedChat } = useContext(SelectedChatContext);
 
   return (
     <>
