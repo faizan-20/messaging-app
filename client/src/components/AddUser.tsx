@@ -9,33 +9,60 @@ import {
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { User } from "./ContactCard";
 import axios, { isAxiosError } from "axios";
 import { ChatContext, ChatType } from "@/context/ChatProvider";
+import Spinner from "./Spinner";
 
 export default function AddUser() {
   const [users, setUsers] = useState<User[]>();
   const [search, setSearch] = useState("");
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { chat, setChat } = useContext(ChatContext);
 
-  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const getAllUsers = async () => {
+    setIsLoading(true);
     try {
-      const { data } = await axios.get(`/users/all?search=${search}`);
+      const { data } = await axios.get(`/users/all`);
       setUsers(data);
     } catch (error) {
       if (isAxiosError(error)) {
         console.log(error);
       } else console.error(error);
     }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    getAllUsers();
+  }, []);
+
+  const submitHandler = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsLoading(true);
+    try {
+      if (search) {
+        const { data } = await axios.get(`/users/all?search=${search}`);
+        setUsers(data);
+      } else {
+        const { data } = await axios.get(`/users/all`);
+        setUsers(data);
+      }
+    } catch (error) {
+      if (isAxiosError(error)) {
+        console.log(error);
+      } else console.error(error);
+    }
+    setIsLoading(false);
   };
 
   const accessChat = async (
     e: React.MouseEvent<HTMLDivElement, MouseEvent>,
   ) => {
+    setIsLoading(true);
     try {
       const { data } = await axios.post<ChatType>("/chat/", {
         userId: (e.target as HTMLDivElement).id,
@@ -47,6 +74,7 @@ export default function AddUser() {
       setOpen(false);
       setSearch("");
       setUsers([]);
+      setIsLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -75,48 +103,55 @@ export default function AddUser() {
           <DialogTitle>Add User</DialogTitle>
           <DialogDescription>Find users to chat with</DialogDescription>
 
-          <div>
+          <div className="max-h-[50vh] flex flex-col">
             <form className="flex gap-2" onSubmit={submitHandler}>
               <Input
                 type="text"
                 placeholder="username"
-                required
                 autoComplete="off"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
               <Button>Search</Button>
             </form>
-            <div className="mt-4">
-              {users && users.length > 0 ? (
+            <div className="mt-4 overflow-y-auto">
+              {!isLoading ? (
                 <>
-                  {users.map((usr) => (
-                    <div
-                      className={`flex items-center px-2 py-2 cursor-pointer transition-all rounded-md border-slate-300 border-2 mt-2 hover:bg-gray-300`}
-                      key={usr._id}
-                      id={usr._id}
-                      onClick={accessChat}
-                    >
-                      <div className="h-12 w-12">
-                        <Avatar className="">
-                          <AvatarImage
-                            src={usr?.avatar}
-                            className="rounded-full object-cover"
-                            alt={`${usr?.fullName}'s Avatar`}
-                          />
-                          <AvatarFallback className="bg-gray-300 text-gray-500 rounded-full">
-                            {usr?.fullName[0].toUpperCase()}
-                          </AvatarFallback>
-                        </Avatar>
-                      </div>
-                      <div className="ml-4">
-                        <div className="font-bold text-lg">{usr?.fullName}</div>
-                      </div>
-                    </div>
-                  ))}
+                  {users && users.length > 0 ? (
+                    <>
+                      {users.map((usr) => (
+                        <div
+                          className={`flex items-center px-2 py-2 cursor-pointer transition-all rounded-md border-slate-300 border-2 mt-2 hover:bg-gray-300`}
+                          key={usr._id}
+                          id={usr._id}
+                          onClick={accessChat}
+                        >
+                          <div className="h-12 w-12">
+                            <Avatar className="">
+                              <AvatarImage
+                                src={usr?.avatar}
+                                className="rounded-full object-cover"
+                                alt={`${usr?.fullName}'s Avatar`}
+                              />
+                              <AvatarFallback className="bg-gray-300 text-gray-500 rounded-full">
+                                {usr?.fullName[0].toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                          </div>
+                          <div className="ml-4">
+                            <div className="font-bold text-lg">
+                              {usr?.fullName}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  ) : (
+                    <div>No Users Found</div>
+                  )}
                 </>
               ) : (
-                <div>No Users Found</div>
+                <Spinner />
               )}
             </div>
           </div>

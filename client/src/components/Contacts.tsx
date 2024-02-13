@@ -28,7 +28,7 @@ export default function Contacts({ user }: UserProps) {
           <div className="mx-6 font-bold text-xl">{user.fullName}</div>
           <AddUser />
         </div>
-        <div className="bg-gray-800 h-[88%] py-2 px-2">
+        <div className="bg-gray-800 h-[88%] py-2 px-2 overflow-y-auto">
           {chat ? (
             <div>
               {chat.map((c) => (

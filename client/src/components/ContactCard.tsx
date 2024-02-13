@@ -45,12 +45,7 @@ export default function ContactCard({
         <div className="font-bold text-lg">{usr?.fullName}</div>
         <div>
           {latestMessage && (
-            <div className="text-sm">
-              <span className="font-bold">
-                {latestMessage.sender?.username || "Unknown"}
-              </span>
-              : {latestMessage.content}
-            </div>
+            <div className="text-sm">{latestMessage.content}</div>
           )}
         </div>
       </div>

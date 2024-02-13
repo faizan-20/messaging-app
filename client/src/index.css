@@ -75,6 +75,33 @@
   }
 }
 
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge, and Firefox */
+.hide-scrollbar {
+  scrollbar-width: thin;
+  -ms-overflow-style: none;
+}
+
+/* Style scrollbar */
+.hide-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.hide-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.hide-scrollbar::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 3px;
+}
+
+.hide-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
 label {
   @apply mb-1 font-bold;
 }

@@ -6,9 +6,11 @@ import Chat from "./Chat";
 import { ChatContext, ChatType } from "@/context/ChatProvider";
 import { User } from "./ContactCard";
 import SelectedChatProvider from "@/context/SelectedChatProvider";
+import Spinner from "./Spinner";
 
 export default function Home() {
   const [user, setUser] = useState<User>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -16,12 +18,14 @@ export default function Home() {
 
   useEffect(() => {
     const fetchChats = async () => {
+      setIsLoading(true);
       try {
         const { data } = await axios.get<ChatType[]>("/chat");
         setChat(data);
       } catch (error) {
         console.error("error while fetching chats: ", error);
       }
+      setIsLoading(false);
     };
     fetchChats();
   }, [setChat, user?._id]);
@@ -40,19 +44,23 @@ export default function Home() {
   }, [navigate]);
 
   return (
-    <div className="bg-gray-900 h-screen flex text-slate-200">
-      <SelectedChatProvider>
-        {user ? (
+    <SelectedChatProvider>
+      <div className="bg-gray-900 h-screen flex text-slate-200 overflow-y-auto">
+        {!isLoading ? (
           <>
-            <Contacts user={user} />
-            <div className="flex-1">
-              <Chat user={user} />
-            </div>
+            {user ? (
+              <>
+                <Contacts user={user} />
+                <Chat user={user} />
+              </>
+            ) : (
+              <div>getting user</div>
+            )}
           </>
         ) : (
-          <div>getting user</div>
+          <Spinner />
         )}
-      </SelectedChatProvider>
-    </div>
+      </div>
+    </SelectedChatProvider>
   );
 }

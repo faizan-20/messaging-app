@@ -9,7 +9,10 @@ import Home from "./components/Home.tsx";
 import { Toaster } from "./components/ui/toaster.tsx";
 import ChatProvider from "./context/ChatProvider.tsx";
 
-axios.defaults.baseURL = "http://localhost:8000/api/v1";
+// const PROD = "";
+const DEV = "http://localhost:8000/api/v1";
+
+axios.defaults.baseURL = DEV;
 axios.defaults.withCredentials = true;
 
 const router = createBrowserRouter([
