@@ -17,6 +17,19 @@ export default function Home() {
   const { setChat } = useContext(ChatContext);
 
   useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const { data } = await axios.get("/users");
+        setUser(data);
+      } catch (error) {
+        console.error(error);
+        navigate("/");
+      }
+    };
+    checkUser();
+  }, [navigate]);
+
+  useEffect(() => {
     const fetchChats = async () => {
       setIsLoading(true);
       try {
@@ -29,19 +42,6 @@ export default function Home() {
     };
     fetchChats();
   }, [setChat, user?._id]);
-
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const { data } = await axios.get("/users");
-        setUser(data);
-      } catch (error) {
-        console.error(error);
-        navigate("/");
-      }
-    };
-    checkUser();
-  }, [navigate]);
 
   return (
     <SelectedChatProvider>

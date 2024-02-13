@@ -25,10 +25,11 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      await axios.post("/users/login", {
+      const { data } = await axios.post("/users/login", {
         username,
         password,
       });
+      localStorage.setItem("accessToken", `Bearer ${data.accessToken}`);
       navigate("/home");
     } catch (error) {
       if (isAxiosError(error)) {
