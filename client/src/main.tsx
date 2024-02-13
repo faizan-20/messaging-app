@@ -16,7 +16,7 @@ axios.defaults.baseURL = PROD;
 
 if (localStorage.getItem("accessToken")) {
   axios.defaults.headers.common["Authorization"] =
-    `${localStorage.getItem("accessToken")}`;
+    localStorage.getItem("accessToken");
 }
 const router = createBrowserRouter([
   {

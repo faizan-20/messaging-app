@@ -29,8 +29,9 @@ export default function Login() {
         username,
         password,
       });
-      console.log(data);
       localStorage.setItem("accessToken", data.token);
+      axios.defaults.headers.common["Authorization"] =
+        `${localStorage.getItem("accessToken")}`;
       navigate("/home");
     } catch (error) {
       if (isAxiosError(error)) {

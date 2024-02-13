@@ -46,7 +46,7 @@ export default function Register() {
     }
 
     try {
-      await axios.post(
+      const { data } = await axios.post(
         "/users/register",
         {
           fullName,
@@ -61,6 +61,9 @@ export default function Register() {
           },
         },
       );
+      localStorage.setItem("accessToken", data.token);
+      axios.defaults.headers.common["Authorization"] =
+        `${localStorage.getItem("accessToken")}`;
       navigate("/");
     } catch (error) {
       if (isAxiosError(error)) {
