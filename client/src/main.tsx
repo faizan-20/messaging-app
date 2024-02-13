@@ -12,7 +12,7 @@ import ChatProvider from "./context/ChatProvider.tsx";
 // const PROD = "https://messaging-app-jquv.onrender.com/";
 // const DEV = "http://localhost:8000/api/v1";
 
-axios.defaults.baseURL = "https://messaging-app-jquv.onrender.com/";
+axios.defaults.baseURL = "https://messaging-app-jquv.onrender.com";
 axios.defaults.withCredentials = true;
 
 const router = createBrowserRouter([

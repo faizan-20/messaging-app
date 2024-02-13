@@ -17,7 +17,7 @@ export type MessageType = {
   users: User[];
 };
 
-const ENDPOINT = "https://messaging-app-service-9xu1.onrender.com";
+const ENDPOINT = "https://messaging-app-jquv.onrender.com";
 let socket: Socket;
 let selectedChatCompare: string;
 
