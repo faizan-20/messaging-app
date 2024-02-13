@@ -10,16 +10,14 @@ import { Toaster } from "./components/ui/toaster.tsx";
 import ChatProvider from "./context/ChatProvider.tsx";
 
 // const PROD = "https://messaging-app-jquv.onrender.com/api/v1";
-// const DEV = "http://localhost:8000/api/v1";
+const DEV = "http://localhost:8000/api/v1";
 
-axios.defaults.baseURL = "https://messaging-app-jquv.onrender.com/api/v1";
-axios.defaults.withCredentials = true;
+axios.defaults.baseURL = DEV;
 
 if (localStorage.getItem("accessToken")) {
   axios.defaults.headers.common["Authorization"] =
-    `Bearer ${localStorage.getItem("accessToken")}`;
+    `${localStorage.getItem("accessToken")}`;
 }
-
 const router = createBrowserRouter([
   {
     path: "/",

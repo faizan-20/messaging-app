@@ -29,7 +29,8 @@ export default function Login() {
         username,
         password,
       });
-      localStorage.setItem("accessToken", data.accessToken);
+      console.log(data);
+      localStorage.setItem("accessToken", data.token);
       navigate("/home");
     } catch (error) {
       if (isAxiosError(error)) {
