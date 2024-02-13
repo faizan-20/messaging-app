@@ -17,7 +17,7 @@ export type MessageType = {
   users: User[];
 };
 
-const ENDPOINT = "http://localhost:8000";
+const ENDPOINT = "https://messaging-app-service-9xu1.onrender.com";
 let socket: Socket;
 let selectedChatCompare: string;
 
