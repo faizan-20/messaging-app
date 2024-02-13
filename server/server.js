@@ -8,10 +8,10 @@ import { Server } from "socket.io";
 const app = express();
 
 app.use(
-  cors({
+  cors(/* {
     credentials: true,
     origin: "http://localhost:5173",
-  }),
+  } */),
 );
 app.use(cookieParser());
 app.use(express.json({ limit: "16kb" }));
@@ -33,9 +33,9 @@ connectDB()
     });
     const io = new Server(server, {
       pingTimeout: 60000,
-      cors: {
-        origin: "http://localhost:5173",
-      },
+      // cors: {
+      //   origin: "http://localhost:5173",
+      // },
     });
 
     io.on("connection", (socket) => {
