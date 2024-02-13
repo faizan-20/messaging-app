@@ -42,10 +42,16 @@ export default function Home() {
   return (
     <div className="bg-gray-900 h-screen flex text-slate-200">
       <SelectedChatProvider>
-        {user ? <Contacts user={user} /> : <div>getting user</div>}
-        <div className="flex-1">
-          <Chat />
-        </div>
+        {user ? (
+          <>
+            <Contacts user={user} />
+            <div className="flex-1">
+              <Chat user={user} />
+            </div>
+          </>
+        ) : (
+          <div>getting user</div>
+        )}
       </SelectedChatProvider>
     </div>
   );

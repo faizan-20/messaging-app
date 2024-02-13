@@ -1,6 +1,7 @@
 import { LatestMessage } from "@/context/ChatProvider";
+import { SelectedChatContext } from "@/context/SelectedChatProvider";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
-import { Dispatch, SetStateAction } from "react";
+import { useContext } from "react";
 export type User = {
   _id: string;
   username: string;
@@ -13,20 +14,17 @@ type ContactCardProps = {
   usr: User;
   latestMessage?: LatestMessage;
   chatId: string;
-  selectedChat: string;
-  setSelectedChat: Dispatch<SetStateAction<string>>;
 };
 
 export default function ContactCard({
   usr,
   latestMessage,
   chatId,
-  selectedChat,
-  setSelectedChat,
 }: ContactCardProps) {
+  const { setSelectedChat, selectedChat } = useContext(SelectedChatContext);
   return (
     <div
-      className={`flex items-center px-4 py-4 cursor-pointer transition-all border-l-2 rounded-l-full border-gray-800 hover:bg-slate-700 ${selectedChat === chatId ? "bg-gray-900" : "bg-gray-800"}`}
+      className={`flex gap-4 items-center px-4 py-4 cursor-pointer transition-all border-2 rounded-md border-gray-800 hover:bg-blue-600 hover:bg-opacity-30 ${selectedChat === chatId ? "bg-gray-900" : "bg-gray-800"}`}
       onClick={() => {
         setSelectedChat(chatId);
       }}

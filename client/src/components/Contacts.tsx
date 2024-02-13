@@ -4,15 +4,13 @@ import AddUser from "./AddUser";
 import ContactCard, { User } from "./ContactCard";
 import { useContext } from "react";
 import { ChatContext } from "@/context/ChatProvider";
-import { SelectedChatContext } from "@/context/SelectedChatProvider";
 
-type UserProps = {
+export type UserProps = {
   user: User;
 };
 
 export default function Contacts({ user }: UserProps) {
   const { chat } = useContext(ChatContext);
-  const { selectedChat, setSelectedChat } = useContext(SelectedChatContext);
 
   return (
     <>
@@ -30,7 +28,7 @@ export default function Contacts({ user }: UserProps) {
           <div className="mx-6 font-bold text-xl">{user.fullName}</div>
           <AddUser />
         </div>
-        <div className="bg-gray-800 h-[88%] pl-2">
+        <div className="bg-gray-800 h-[88%] py-2 px-2">
           {chat ? (
             <div>
               {chat.map((c) => (
@@ -39,8 +37,6 @@ export default function Contacts({ user }: UserProps) {
                     usr={c.users[0]?._id === user._id ? c.users[1] : c.users[0]}
                     latestMessage={c.latestMessage}
                     chatId={c._id}
-                    selectedChat={selectedChat}
-                    setSelectedChat={setSelectedChat}
                   />
                 </div>
               ))}
