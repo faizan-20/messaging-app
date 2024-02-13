@@ -14,8 +14,11 @@ import ChatProvider from "./context/ChatProvider.tsx";
 
 axios.defaults.baseURL = "https://messaging-app-jquv.onrender.com/api/v1";
 axios.defaults.withCredentials = true;
-axios.defaults.headers.common["Authorization"] =
-  localStorage.getItem("accessToken");
+
+if (localStorage.getItem("accessToken")) {
+  axios.defaults.headers.common["Authorization"] =
+    `Bearer ${localStorage.getItem("accessToken")}`;
+}
 
 const router = createBrowserRouter([
   {

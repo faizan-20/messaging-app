@@ -29,7 +29,7 @@ export default function Login() {
         username,
         password,
       });
-      localStorage.setItem("accessToken", `Bearer ${data.accessToken}`);
+      localStorage.setItem("accessToken", data.accessToken);
       navigate("/home");
     } catch (error) {
       if (isAxiosError(error)) {
