@@ -10,7 +10,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: "https://messaging-app-ochre.vercel.app/",
+    origin: "https://messaging-app-ochre.vercel.app",
   }),
 );
 app.use(cookieParser());
@@ -34,7 +34,7 @@ connectDB()
     const io = new Server(server, {
       pingTimeout: 60000,
       cors: {
-        origin: "https://messaging-app-ochre.vercel.app/",
+        origin: "https://messaging-app-ochre.vercel.app",
       },
     });
 
