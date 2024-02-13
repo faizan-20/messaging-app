@@ -9,10 +9,10 @@ import Home from "./components/Home.tsx";
 import { Toaster } from "./components/ui/toaster.tsx";
 import ChatProvider from "./context/ChatProvider.tsx";
 
-// const PROD = "";
-const DEV = "http://localhost:8000/api/v1";
+// const PROD = "https://messaging-app-service-9xu1.onrender.com";
+// const DEV = "http://localhost:8000/api/v1";
 
-axios.defaults.baseURL = DEV;
+axios.defaults.baseURL = "https://messaging-app-service-9xu1.onrender.com";
 axios.defaults.withCredentials = true;
 
 const router = createBrowserRouter([
