@@ -7,13 +7,12 @@ import { Server } from "socket.io";
 
 const app = express();
 
-// app.use(
-//   cors(/* {
-//     credentials: true,
-//     origin: "http://localhost:5173",
-//   } */),
-// );
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: "https://messaging-app-ochre.vercel.app/",
+  }),
+);
 app.use(cookieParser());
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -34,9 +33,9 @@ connectDB()
     });
     const io = new Server(server, {
       pingTimeout: 60000,
-      // cors: {
-      //   origin: "http://localhost:5173",
-      // },
+      cors: {
+        origin: "https://messaging-app-ochre.vercel.app/",
+      },
     });
 
     io.on("connection", (socket) => {
