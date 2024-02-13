@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import axios from "axios";
+import axios, { isAxiosError } from "axios";
 import { useToast } from "./ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { Label } from "@radix-ui/react-label";
@@ -63,11 +63,13 @@ export default function Register() {
       );
       navigate("/");
     } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Oh uh, Something went wrong",
-        description: error.response.data.msg,
-      });
+      if (isAxiosError(error)) {
+        toast({
+          variant: "destructive",
+          title: "Oh uh, Something went wrong",
+          description: error?.response?.data.msg,
+        });
+      } else console.error(error);
     }
   };
 
