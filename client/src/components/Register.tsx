@@ -5,6 +5,7 @@ import axios, { isAxiosError } from "axios";
 import { useToast } from "./ui/use-toast";
 import { useNavigate } from "react-router-dom";
 import { Label } from "@radix-ui/react-label";
+import Spinner from "./Spinner";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -15,6 +16,7 @@ export default function Register() {
     confPassword: "",
   });
   const [avatar, setAvatar] = useState<File | undefined>();
+  const [isLoading, setIsLoading] = useState(false);
 
   const { fullName, username, email, password, confPassword } = formData;
 
@@ -28,12 +30,14 @@ export default function Register() {
 
   const submitHandler = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
 
     if (!fullName || !username || !email || !password) {
       toast({
         variant: "destructive",
         title: "All fields are required",
       });
+      setIsLoading(false);
       return;
     }
 
@@ -42,6 +46,7 @@ export default function Register() {
         variant: "destructive",
         title: "Passwords don't match.",
       });
+      setIsLoading(false);
       return;
     }
 
@@ -74,6 +79,7 @@ export default function Register() {
         });
       } else console.error(error);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -169,7 +175,9 @@ export default function Register() {
               </div>
             </div>
             <div>
-              <Button className="m-4">Submit</Button>
+              <Button className="m-2">
+                {isLoading ? <Spinner /> : <div>Submit</div>}
+              </Button>
             </div>
           </form>
         </div>

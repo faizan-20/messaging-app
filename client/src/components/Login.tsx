@@ -5,12 +5,14 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { useToast } from "./ui/use-toast";
 import { Label } from "@radix-ui/react-label";
+import Spinner from "./Spinner";
 
 export default function Login() {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const { username, password } = formData;
   const navigate = useNavigate();
@@ -23,6 +25,7 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const { data } = await axios.post("/users/login", {
@@ -42,18 +45,23 @@ export default function Login() {
         });
       } else console.error(error);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    const checkUser = async () => {
-      try {
-        await axios.get("/users");
-        navigate("/home");
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    checkUser();
+    // const checkUser = async () => {
+    //   try {
+    //     await axios.get("/users");
+    //     navigate("/home");
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };
+    // checkUser();
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      navigate("/home");
+    }
   }, [navigate]);
 
   return (
@@ -89,7 +97,9 @@ export default function Login() {
               />
             </div>
             <div className="flex justify-between items-center">
-              <Button className="m-2">Submit</Button>
+              <Button className="m-2">
+                {isLoading ? <Spinner /> : <div>Submit</div>}
+              </Button>
               <Link className="text-indigo-900" to="/register">
                 Register?
               </Link>
