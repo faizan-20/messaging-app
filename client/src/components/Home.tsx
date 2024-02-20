@@ -45,7 +45,7 @@ export default function Home() {
 
   return (
     <SelectedChatProvider>
-      <div className="bg-gray-900 h-screen flex text-slate-200 overflow-y-auto">
+      <div className="bg-gray-900 h-screen w-screen justify-center flex text-slate-200 overflow-y-auto">
         {!isLoading ? (
           <>
             {user ? (
