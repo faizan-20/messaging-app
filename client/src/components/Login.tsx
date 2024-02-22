@@ -48,16 +48,31 @@ export default function Login() {
     setIsLoading(false);
   };
 
+  const loginAsGuest = async () => {
+    setIsLoading(true);
+
+    try {
+      const { data } = await axios.post("/users/login", {
+        username: "guest",
+        password: "guest123",
+      });
+      localStorage.setItem("accessToken", data.token);
+      axios.defaults.headers.common["Authorization"] =
+        `${localStorage.getItem("accessToken")}`;
+      navigate("/home");
+    } catch (error) {
+      if (isAxiosError(error)) {
+        toast({
+          variant: "destructive",
+          title: "Oh uh, Something went wrong",
+          description: error?.response?.data.msg,
+        });
+      } else console.error(error);
+    }
+    setIsLoading(false);
+  };
+
   useEffect(() => {
-    // const checkUser = async () => {
-    //   try {
-    //     await axios.get("/users");
-    //     navigate("/home");
-    //   } catch (error) {
-    //     console.error(error);
-    //   }
-    // };
-    // checkUser();
     const token = localStorage.getItem("accessToken");
     if (token) {
       navigate("/home");
@@ -103,6 +118,12 @@ export default function Login() {
               <Link className="text-indigo-900" to="/register">
                 Register?
               </Link>
+            </div>
+            <div className="self-center" onClick={loginAsGuest}>
+              Or{" "}
+              <span className="cursor-pointer text-blue-400 hover:text-slate-400">
+                Login as guest user
+              </span>
             </div>
           </form>
         </div>

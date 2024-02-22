@@ -22,6 +22,7 @@ export default function Home() {
         const { data } = await axios.get("/users");
         setUser(data);
       } catch (error) {
+        localStorage.clear();
         console.error(error);
         navigate("/");
       }
