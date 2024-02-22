@@ -45,7 +45,13 @@ export default function ContactCard({
         <div className="font-bold text-lg">{usr?.fullName}</div>
         <div>
           {latestMessage && (
-            <div className="text-sm">{latestMessage.content}</div>
+            <div className="text-sm">
+              {latestMessage.content.length >= 50 ? (
+                <>{latestMessage.content.substring(0, 50)}...</>
+              ) : (
+                latestMessage.content
+              )}
+            </div>
           )}
         </div>
       </div>

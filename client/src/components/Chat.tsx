@@ -122,7 +122,7 @@ export default function Chat({ user }: UserProps) {
                 {messages.map((msg) => (
                   <div
                     key={msg._id}
-                    className={`${msg.sender._id === user._id ? "self-end bg-blue-600" : "self-start bg-green-600"} px-3 py-1 rounded-sm mx-4 my-1`}
+                    className={`${msg.sender._id === user._id ? "self-end bg-blue-600" : "self-start bg-green-600"} px-3 py-1 rounded-sm mx-4 my-1 max-w-[30vw]`}
                   >
                     {msg.content}
                   </div>
